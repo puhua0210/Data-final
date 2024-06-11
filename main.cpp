@@ -11,7 +11,7 @@ int main(){
     string line;
     int size = 0;
     
-    ifstream in("C:/VScode C++ project/data structure/final_project/data1.csv");
+    ifstream in("C:/Users/72161/OneDrive/文件/GitHub/Data-final/data1.csv");
     if (!in){
         cout << "開啟檔案失敗！" << endl;
         exit(1);
@@ -20,13 +20,13 @@ int main(){
         size++; //暫存資料筆數(包含重複日期)
     }
     in.close();
-    in.open("C:/VScode C++ project/data structure/final_project/data1.csv");
+    in.open("C:/Users/72161/OneDrive/文件/GitHub/Data-final/data1.csv");
     if (!in){
         cout << "開啟檔案失敗！" << endl;
         exit(1);
     } 
 
-    string unique_date[size];
+    string unique_date[100000];
     int i = 0;
     while (getline(in, line)){
         bool is_unique = true;
