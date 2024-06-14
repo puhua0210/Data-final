@@ -3,6 +3,7 @@
 #include <string>
 #include <cstring>
 #include <fstream>
+#include <chrono>
 #include "MaxHeap.h"
 using namespace std;
 
@@ -48,6 +49,7 @@ int main() {
         cout << "開啟檔案失敗！" << endl;
         exit(1);
     }
+    auto start = chrono::high_resolution_clock::now();
     size = i;
     MaxHeap heap;
     double temp[7];
@@ -146,6 +148,9 @@ int main() {
         cout << "The minimum is " << heap.get(0, i) << " and it occurs on date " << int(heap.get(0, 0)) << endl;
         cout << "The median is " << heap.get(size / 2, i) << " and it occurs on date " << int(heap.get(size / 2, 0)) << endl;
     }
+    auto end = chrono::high_resolution_clock::now();
+    chrono::duration<double> duration = end - start;
+    cout << "運行時間: " << duration.count() << " 秒" << std::endl;
     in.close();
     return 0;
 }
