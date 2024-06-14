@@ -1,80 +1,125 @@
+#ifndef MAXHEAP_H
+#define MAXHEAP_H
+
 #include <iostream>
-#include <string>
-using namespace std;
+#include "Node.h"
 
-//col 0    1    2    3   4     5            6
-//    date open high low close daily_return intraday_return
-class MaxHeap{
+class MaxHeap {
 private:
-    double** arr;
+    Node* head;
     int size;
+
 public:
-    MaxHeap(int n){
-        arr = new double* [n];
-        for(int i=0;i<n;i++){
-            arr[i]=new double[7];
+    MaxHeap() {
+        head = nullptr;
+        size = 0;
+    }
+
+    void insert(double* a_row) {
+        Node* newNode = new Node(a_row);
+        newNode->next = head;
+        head = newNode;
+        size++;
+    }
+
+    double get(int index, int col) {
+        Node* temp = head;
+        for (int i = 0; i < index && temp != nullptr; i++) {
+            temp = temp->next;
         }
-        size = n;
+        if (temp == nullptr) {
+            std::cerr << "Index out of bounds!" << std::endl;
+            return -1;
+        }
+        return temp->data[col];
     }
 
-    void insert(int i, double* a_row){
-        copy(a_row, a_row + 5, arr[i]); //把a_row的前五列資料複製到arr[i]裡面
+    Node* getNode(int index) {
+        Node* temp = head;
+        for (int i = 0; i < index && temp != nullptr; i++) {
+            temp = temp->next;
+        }
+        return temp;
     }
 
-    double get(int r,int c){
-        return arr[r][c];
+    void swap(Node* a, Node* b) {
+        double temp[7];
+        for (int i = 0; i < 7; i++) {
+            temp[i] = a->data[i];
+            a->data[i] = b->data[i];
+            b->data[i] = temp[i];
+        }
     }
 
-    void MAX_HEAPIFY(int col, int n,int i){ //col是哪列資料 n是heap的大小 i是子樹的根
+    void MAX_HEAPIFY(int col, int n, int i) {
         int largest = i;
-        int left = 2*i+1;
-        int right = 2*i+2;
-        if (left < n && arr[left][col] > arr[largest][col])
+        int left = 2 * i + 1;
+        int right = 2 * i + 2;
+
+        Node* largestNode = getNode(largest);
+        Node* leftNode = getNode(left);
+        Node* rightNode = getNode(right);
+
+        if (left < n && leftNode->data[col] > largestNode->data[col]) {
             largest = left;
+        }
 
-        if (right < n && arr[right][col] > arr[largest][col])
+        if (right < n && rightNode->data[col] > getNode(largest)->data[col]) {
             largest = right;
+        }
 
-        // Swap and continue heapifying if root is not largest
         if (largest != i) {
-            swap(arr[i], arr[largest]);
+            swap(getNode(i), getNode(largest));
             MAX_HEAPIFY(col, n, largest);
         }
     }
 
-    void heapSort(int col) { //col是哪列資料 
-        // Build max heap
-        for (int i = size/2; i >= 0; i--){
+    void heapSort(int col) {
+        for (int i = size / 2 - 1; i >= 0; i--) {
             MAX_HEAPIFY(col, size, i);
         }
-        // Heap sort
+
         for (int i = size - 1; i >= 0; i--) {
-            swap(arr[0], arr[i]);
-            // Heapify root element to get highest element at root again
+            swap(getNode(0), getNode(i));
             MAX_HEAPIFY(col, i, 0);
         }
     }
 
-    void daily_returns(){ // 要先sort by date才可以用，計算daily return並放在column 5
-        for(int i=1;i<size;i++){
-            arr[i][5] = (arr[i][4] - arr[i-1][4]) / arr[i-1][4]; //小數點 還不是百分比
+    void daily_returns() {
+        Node* prev = head;
+        Node* curr = head->next;
+        while (curr != nullptr) {
+            curr->data[5] = (curr->data[4] - prev->data[4]) / prev->data[4];
+            prev = curr;
+            curr = curr->next;
         }
     }
 
-    void intraday_return(){ // 要先sort by date才可以用，計算intraday return並放在column 6
-        for(int i=0;i<size;i++){
-            arr[i][6] = (arr[i][4] - arr[i][1]) / arr[i][1]; //小數點 還不是百分比
+    void intraday_return() {
+        Node* curr = head;
+        while (curr != nullptr) {
+            curr->data[6] = (curr->data[4] - curr->data[1]) / curr->data[1];
+            curr = curr->next;
         }
-    } 
+    }
 
-    void show(){ //測試用
-        for(int i=0;i<10;i++){
-            for(int j=0;j<5;j++){
-                if(j==0) cout << int(arr[i][j]) << " ";
-                else cout << arr[i][j] << " ";
-                
+    void show() {
+        Node* temp = head;
+        int count = 0;
+        while (temp != nullptr && count < 10) {
+            for (int j = 0; j < 5; j++) {
+                if (j == 0) std::cout << int(temp->data[j]) << " ";
+                else std::cout << temp->data[j] << " ";
             }
-            cout << endl;
+            std::cout << std::endl;
+            temp = temp->next;
+            count++;
         }
+    }
+
+    int getSize() {
+        return size;
     }
 };
+
+#endif
