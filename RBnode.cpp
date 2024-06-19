@@ -1,17 +1,18 @@
 #include <iostream>
+#include "stock.hpp"
 using namespace std;
 
 enum Color { RED, BLACK };
 
-// class RBnode {
-// public:
-//     stock data;
-//     Color color;
-//     RBnode *left, *right, *parent;
+class RBnode {
+public:
+    stock data;
+    Color color;
+    RBnode *left, *right, *parent;
 
-//     RBnode(stock data) : data(data) {
-//         parent = left = right = nullptr;
-//         color = RED;
-//     }
+    RBnode(stock data) : data(data) {
+        parent = left = right = nullptr;
+        color = RED;
+    }
 
-// };
+};

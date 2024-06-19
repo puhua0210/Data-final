@@ -4,14 +4,13 @@
 #include <cstring>
 #include <fstream>
 #include <time.h> 
-#include "MaxHeap.cpp"
+#include "RBtree.cpp"
 using namespace std;
 
 //col 0    1    2    3   4     5            6
 //    date open high low close daily_return intraday_return
 
 int main(){  
-
     //讀取檔案
     string line;
     ifstream in;
@@ -21,15 +20,19 @@ int main(){
         cout << "開啟檔案失敗！" << endl;
         exit(1);
     } 
-    MaxHeap heap;//建立MaxHeap array
+    double START, END; 
+    START = clock();
+
+    RBtree rbtree;//建立rbtree
+    Vector<stock> vec;//存放不重複的rbtree的資料(日期排序)
     stock temp;
     int cut;
     while (getline(in, line)){
         cut = line.find(",");
         temp.date = line.substr(0, cut);
         bool is_unique = true;
-        for(int j=0;j<heap.size();j++){
-            if(heap.get(j).date == temp.date){
+        for(int j=0;j<vec.size();j++){
+            if(vec[j].date == temp.date){
                 is_unique = false;
                 break;
             }
@@ -51,49 +54,50 @@ int main(){
 
         temp.close = stod(line);
         
-        heap.insert(temp);
+        rbtree.insertElement(temp);
+        vec.push_back(temp);
     }
-
-    double START,END; 
-    START = clock();
-    MaxHeap heapcopy = heap; //原本的heap是照日期排序的 不要動到 
-    //2~9題使用heapcopy
+    END = clock();
+    cout << "插入資料，建樹時間: " << (END - START) / CLOCKS_PER_SEC << endl;
+    
+    Vector<stock> veccopy; //原本的vec是照日期排序的 不要動到 
+    //2~4題使用heapcopy
     cout << "Task(A):" << endl;
     //(1) Determine how many unique dates are in the dataset.
-    cout << "(1) There are "  << heapcopy.size() << " unique dates in the dataset." << endl;
+    cout << "(1) There are "  << vec.size() << " unique dates in the dataset." << endl;
 
     //(2) Find the 10 smallest prices and which dates contain these smallest prices.
-    heapcopy.heapSort(); //sort by close price
+    rbtree.inOrder(rbtree.getroot(), veccopy);//排序rbtree close price放到veccopy
     cout << "(2) The 10 smallest prices are:" << endl;
     for(int i=0;i<10;i++){
-        cout << heapcopy.get(i).close << " on date " << heapcopy.get(i).date << endl;
+        cout << veccopy[i].close << " on date " << veccopy[i].date << endl;
     }
     
     //(3) Find the 10 largest prices and which dates contain these largest prices.
     cout << "(3) The 10 largest prices are:" << endl;
-    for(int i=heapcopy.size()-10;i<heapcopy.size();i++){
-        cout << heapcopy.get(i).close << " on date " << heapcopy.get(i).date << endl;
+    for(int i=veccopy.size()-10;i<veccopy.size();i++){
+        cout << veccopy[i].close << " on date " << veccopy[i].close << endl;
     }
 
     //(4) Find the median price and its occurring date
-    cout << "(4) The first median price is " << heapcopy.get(heap.size()/2-1).close << " and its occurring date is " << heapcopy.get(heap.size()/2-1).date << endl;
-    cout << "    The second median price is " << heapcopy.get(heap.size()/2).close << " and its occurring date is " << heapcopy.get(heap.size()/2).date << endl;
+    cout << "(4) The first median price is " << veccopy[veccopy.size()/2-1].close << " and its occurring date is " << veccopy[veccopy.size()/2-1].date << endl;
+    cout << "    The second median price is " << veccopy[veccopy.size()/2].close << " and its occurring date is " << veccopy[veccopy.size()/2].date << endl;
 
     //(5) Compute the daily return for every day (except the first day). Then determine what the 
     // maximum and minimum returns (return could be a negative value) are and on which day(s) they occur.
     
-    double daily_returns[heap.size()];
+    double daily_returns[vec.size()];
     double max_return=0, min_return=INT_MAX;
     string max_date, min_date;
-    for(int i=0;i<heap.size()-1;i++){
-        daily_returns[i]=(heap.get(i+1).close-heap.get(i).close) / heap.get(i).close * 100;
+    for(int i=0;i<vec.size()-1;i++){
+        daily_returns[i]=(vec[i+1].close-vec[i].close) / vec[i].close * 100;
         if(daily_returns[i] > max_return){
             max_return = daily_returns[i];
-            max_date = heap.get(i+1).date;
+            max_date = vec[i+1].date;
         }
         if(daily_returns[i] < min_return){
             min_return = daily_returns[i];
-            min_date = heap.get(i+1).date;
+            min_date = vec[i+1].date;
         }
     }
     cout << "(5) The maximum return is " << max_return << "%" << " and it occurs on " << max_date << endl;
@@ -101,17 +105,17 @@ int main(){
     
     //(6) Compute the intraday return for every day. Then determine what the maximum and
     // minimum returns (return could be a negative value) are and on which day(s) they occur.
-    double intraday_return[heap.size()];
+    double intraday_return[vec.size()];
     max_return=0, min_return=INT_MAX;
-    for(int i=0;i<heap.size();i++){
-        daily_returns[i]=(heap.get(i).close-heap.get(i).open) / heap.get(i).open * 100;
+    for(int i=0;i<vec.size();i++){
+        daily_returns[i]=(vec[i].close-vec[i].open) / vec[i].open * 100;
         if(daily_returns[i] > max_return){
             max_return = daily_returns[i];
-            max_date = heap.get(i).date;
+            max_date = vec[i].date;
         }
         if(daily_returns[i] < min_return){
             min_return = daily_returns[i];
-            min_date = heap.get(i).date;
+            min_date = vec[i].date;
         }
     }
     cout << "(6) The maximum return is " << max_return << "%" << " and it occurs on " << max_date << endl;
@@ -119,29 +123,31 @@ int main(){
 
     //(10) Find the maximum, minimum and median prices using all the 4 columns of prices 
     // (i.e., Open_price, High_price, Low_price and Close_price) and determine on which date they occur.
-    int n=heap.size()*4;
-    MaxHeap all_price;
+    int n=vec.size()*4;
+    RBtree all_price;
     stock price;
-    for(int i=0;i<heap.size();i++){ //第i天的四個價格
-        price.date = heap.get(i).date;
+    for(int i=0;i<vec.size();i++){ //第i天的四個價格
+        price.date = vec[i].date;
         //四種價格都放入heap的close price
-        price.close = heap.get(i).open;
-        all_price.insert(price);
-        price.close = heap.get(i).high;
-        all_price.insert(price);
-        price.close = heap.get(i).low;
-        all_price.insert(price);
-        price.close = heap.get(i).close;
-        all_price.insert(price);
+        price.close = vec[i].open;
+        all_price.insertElement(price);
+        price.close = vec[i].high;
+        all_price.insertElement(price);
+        price.close = vec[i].low;
+        all_price.insertElement(price);
+        price.close = vec[i].close;
+        all_price.insertElement(price);
     }
-    all_price.heapSort();
-    cout << "(10) The maximum prices are: " << all_price.get(n-1).close << " on date " << all_price.get(n-1).date << endl;
-    cout << "     The minimum prices are: " << all_price.get(0).close << " on date " << all_price.get(0).date << endl;
-    cout << "     The first median prices are: " << all_price.get(n/2-1).close << " on date " << all_price.get(n/2-1).date << endl;
-    cout << "     The second median prices are: " << all_price.get(n/2).close << " on date " << all_price.get(n/2).date << endl;
+    Vector<stock> vec2;//存放all_price的資料
+    all_price.inOrder(all_price.getroot(), vec2);//排序all_price rbtree放到vec2
+
+    cout << "(10) The maximum prices are: " << vec2[n-1].close << " on date " << vec2[n-1].date << endl;
+    cout << "     The minimum prices are: " << vec2[0].close << " on date " << vec2[0].date << endl;
+    cout << "     The first median prices are: " << vec2[n/2-1].close << " on date " << vec2[n/2-1].date << endl;
+    cout << "     The second median prices are: " << vec2[n/2].close << " on date " << vec2[n/2].date << endl;
     
     END = clock();
-    cout << (END - START) / CLOCKS_PER_SEC << endl;
+    cout << "建樹、排序與搜尋整體時間: " << (END - START) / CLOCKS_PER_SEC << endl;
 
     cout << "Task(B):" << endl;
     

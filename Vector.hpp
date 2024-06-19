@@ -36,13 +36,6 @@ public:
         return arr[index];
     }
 
-    // T& at(int index) {
-    //     if (index < 0 || index >= current) {
-    //         throw out_of_range("Vector index out of range");
-    //     }
-    //     return arr[index];
-    // }
-
     void push_back(T data) {
         if (current == capacity) {
             T* temp = new T[2 * capacity];
@@ -64,13 +57,6 @@ public:
         if (current > 0) {
             current--;
         }
-    }
-
-    T get(int index) const {
-        if (index < 0 || index >= current) {
-            return T();
-        }
-        return arr[index];
     }
 
     int size() const {
@@ -108,8 +94,5 @@ public:
         return &arr[current];
     }
 
-    // ~Vector() {
-    //     delete[] arr;
-    // }
 };
 #endif

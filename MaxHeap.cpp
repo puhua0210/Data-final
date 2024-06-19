@@ -1,7 +1,7 @@
 #include <iostream>
 #include <string>
 #include "stock.hpp"
-#include "Vector.cpp"
+#include "Vector.hpp"
 using namespace std;
 
 //col 0    1    2    3   4    
