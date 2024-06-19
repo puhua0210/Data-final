@@ -12,7 +12,7 @@ int main() {
     string line;
     int size = 0;
 
-    ifstream in("C:\\Users\\72161\\source\\repos\\DS2\\x64\\Debug\\data1.csv");
+    ifstream in("data1.csv");
     if (!in) {
         cout << "開啟檔案失敗！" << endl;
         exit(1);
@@ -21,7 +21,7 @@ int main() {
         size++; //暫存資料筆數(包含重複日期)
     }
     in.close();
-    in.open("C:\\Users\\72161\\source\\repos\\DS2\\x64\\Debug\\data1.csv");
+    in.open("data1.csv");
     if (!in) {
         cout << "開啟檔案失敗！" << endl;
         exit(1);
@@ -44,7 +44,7 @@ int main() {
     }
 
     in.close();
-    in.open("C:\\Users\\72161\\source\\repos\\DS2\\x64\\Debug\\data1.csv");
+    in.open("data1.csv");
     if (!in) {
         cout << "開啟檔案失敗！" << endl;
         exit(1);
