@@ -1,41 +1,42 @@
 #include <iostream>
 #include <string>
+#include "stock.hpp"
+#include "Vector.cpp"
 using namespace std;
 
-//col 0    1    2    3   4     5            6
-//    date open high low close daily_return intraday_return
-
-struct stock
-{
-    string date;
-    double open=0;
-    double high=0;
-    double low=0;
-    double close=0;
-};
-
+//col 0    1    2    3   4    
+//    date open high low close 
 class MaxHeap{
 private:
-    stock* arr;
-    int size;
+    Vector<stock> arr;
+
 public:
-    MaxHeap(int n){
-        arr = new stock[n];
-        size = n;
+    MaxHeap(){}
+
+    int size(){
+        return arr.size();
     }
 
-    void insert(int i, stock s){
-        arr[i] = s;
+    void insert(stock s) {
+        arr.push_back(s);
+        int i = arr.size() - 1;
+        int parent = (i - 1) / 2;
+        while (i > 0 && arr[parent].close < arr[i].close) {
+            swap(arr[i], arr[parent]);
+            i = parent;
+            parent = (i - 1) / 2;
+        }
     }
 
     stock get(int i){
         return arr[i];
     }
 
-    void MAX_HEAPIFY(int n,int i){ //by close_price n是heap的大小 i是子樹的根
+    void MAX_HEAPIFY(int n, int i){ //by close_price n是heap的大小 i是子樹的根
         int largest = i;
         int left = 2*i+1;
         int right = 2*i+2;
+        
         if (left < n && arr[left].close > arr[largest].close)
             largest = left;
 
@@ -50,12 +51,8 @@ public:
     }
 
     void heapSort() { //col是哪列資料 
-        // Build max heap
-        for (int i = size/2; i >= 0; i--){
-            MAX_HEAPIFY(size, i);
-        }
         // Heap sort
-        for (int i = size - 1; i >= 0; i--) {
+        for (int i = arr.size() - 1; i >= 0; i--) {
             swap(arr[0], arr[i]);
             // Heapify root element to get highest element at root again
             MAX_HEAPIFY(i, 0);
