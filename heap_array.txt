@@ -1,0 +1,73 @@
+----------------------------------------Task(A)----------------------------------------------
+插入資料，建樹時間: 0.694
+(1) There are 4571 unique dates in the dataset.
+(2) The 10 smallest prices are:
+3446.26 on date 20011003
+3492.12 on date 20011002
+3493.66 on date 20011004
+3493.78 on date 20010925
+3520.35 on date 20011008
+3533.51 on date 20010924
+3567.63 on date 20010927
+3585.46 on date 20011005
+3591.85 on date 20010921
+3618.93 on date 20011009
+(3) The 10 largest prices are:
+10050.4 on date 20000401
+10057.7 on date 20000210
+10064.5 on date 20000216
+10068 on date 20000411
+10096.4 on date 20000218
+10127.5 on date 20000410
+10128.7 on date 20000211
+10161 on date 20000219
+10186.2 on date 20000405
+10202.2 on date 20000217
+(4) The first median price is 7548.37 and its occurring date is 20110908
+    The second median price is 7548.48 and its occurring date is 20100706
+(5) The maximum return is 1.70198% and it occurs on 20010920
+    The minimum return is 0% and it occurs on 20030821
+(6) The maximum return is 6.96364% and it occurs on 20001121
+    The minimum return is -7.20748% and it occurs on 19990716
+(10) The maximum prices are: 10393.6 on date 20000218
+     The minimum prices are: 3411.68 on date 20010926
+     The first median prices are: 7550.13 on date 19990427
+     The second median prices are: 7550.23 on date 20110823
+建樹、排序與搜尋整體時間: 0.713
+----------------------------------------Task(B)----------------------------------------------
+插入資料，建樹時間: 0.017
+Task(B):
+(1) There are 915 unique dates in the dataset.
+(2) The 10 smallest prices are:
+3567.63 on date 20010927
+3585.46 on date 20011005
+3698.84 on date 20010920
+3712.82 on date 20011015
+3900.62 on date 20011022
+3947.61 on date 20021009
+4065.1 on date 20011029
+4080.51 on date 20011105
+4171.1 on date 20081121
+4171.76 on date 20021002
+(3) The 10 largest prices are:
+9876.45 on date 20170328
+9897.8 on date 20170406
+9899.94 on date 20170505
+9911.39 on date 20000412
+9947.62 on date 20170519
+9969.28 on date 20000406
+9972.49 on date 20170321
+9986.82 on date 20170512
+10057.7 on date 20000210
+10202.2 on date 20000217
+(4) The first median price is 7535.82 and its occurring date is 20111026
+    The second median price is 7543.5 and its occurring date is 20080130
+(5) The maximum return is 5.05815% and it occurs on 20011022
+    The minimum return is 0% and it occurs on 20050818
+(6) The maximum return is 6.13798% and it occurs on 20081107
+    The minimum return is -7.20748% and it occurs on 19990716
+(10) The maximum prices are: 10329 on date 20000406
+     The minimum prices are: 3467.94 on date 20011005
+     The first median prices are: 7535.82 on date 20111026
+     The second median prices are: 7538.04 on date 20110913
+建樹、排序與搜尋整體時間: 0.02

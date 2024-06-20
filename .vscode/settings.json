@@ -3,6 +3,19 @@
         "iostream": "cpp",
         "ostream": "cpp",
         "new": "cpp",
-        "iomanip": "cpp"
+        "iomanip": "cpp",
+        "array": "cpp",
+        "string_view": "cpp",
+        "*.tcc": "cpp",
+        "memory": "cpp",
+        "format": "cpp",
+        "istream": "cpp",
+        "functional": "cpp",
+        "tuple": "cpp",
+        "utility": "cpp",
+        "variant": "cpp",
+        "chrono": "cpp",
+        "fstream": "cpp",
+        "iosfwd": "cpp"
     }
 }
