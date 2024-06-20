@@ -24,7 +24,9 @@ int main() {
     double START, END;
     START = clock();
 
+    Vector<stock> bydate;
     MaxHeap heap;
+    
     stock temp;
     int cut;
     while (getline(in, line)) {
@@ -54,56 +56,58 @@ int main() {
 
         temp.close = stod(line);
 
+        bydate.push_back(temp);
         heap.insert(temp);
     }
+
     END = clock();
     out << "插入資料，建樹時間: " << (END - START) / CLOCKS_PER_SEC << endl;
 
-    MaxHeap heapcopy = heap;
-    out << "(1) There are " << heapcopy.size() << " unique dates in the dataset." << endl;
+    out << "(1) There are " << heap.size() << " unique dates in the dataset." << endl;
 
-    heapcopy.heapSort();
+    heap.heapSort();
     out << "(2) The 10 smallest prices are:" << endl;
     for (int i = 0; i < 10; i++) {
-        out << heapcopy.get(i).close << " on date " << heapcopy.get(i).date << endl;
+        out << heap.get(i).close << " on date " << heap.get(i).date << endl;
     }
 
     out << "(3) The 10 largest prices are:" << endl;
-    for (int i = heapcopy.size() - 10; i < heapcopy.size(); i++) {
-        out << heapcopy.get(i).close << " on date " << heapcopy.get(i).date << endl;
+    for (int i = heap.size() - 10; i < heap.size(); i++) {
+        out << heap.get(i).close << " on date " << heap.get(i).date << endl;
     }
 
-    out << "(4) The first median price is " << heapcopy.get(heap.size() / 2 - 1).close << " and its occurring date is " << heapcopy.get(heap.size() / 2 - 1).date << endl;
-    out << "    The second median price is " << heapcopy.get(heap.size() / 2).close << " and its occurring date is " << heapcopy.get(heap.size() / 2).date << endl;
+    out << "(4) The first median price is " << heap.get(heap.size() / 2).close << " and its occurring date is " << heap.get(heap.size() / 2).date << endl;
     
-    double daily_returns[heap.size()];
+    double daily_returns[bydate.size()];
     double max_return = 0, min_return = INT_MAX;
     string max_date, min_date;
-    for (int i = 0; i < heap.size() - 1; i++) {
-        daily_returns[i] = (heap.get(i + 1).close - heap.get(i).close) / heap.get(i).close * 100;
+    for (int i = 0; i < bydate.size() - 1; i++) {
+        daily_returns[i] = (bydate[i + 1].close - bydate[i].close) / bydate[i].close * 100;
+        
         if (daily_returns[i] > max_return) {
             max_return = daily_returns[i];
-            max_date = heap.get(i + 1).date;
+            max_date = bydate[i + 1].date;
         }
         if (daily_returns[i] < min_return) {
             min_return = daily_returns[i];
-            min_date = heap.get(i + 1).date;
+            min_date = bydate[i + 1].date;
         }
     }
+
     out << "(5) The maximum return is " << max_return << "%" << " and it occurs on " << max_date << endl;
     out << "    The minimum return is " << min_return << "%" << " and it occurs on " << min_date << endl;
 
-    double intraday_return[heap.size()];
+    double intraday_return[bydate.size()];
     max_return = 0, min_return = INT_MAX;
-    for (int i = 0; i < heap.size(); i++) {
-        intraday_return[i] = (heap.get(i).close - heap.get(i).open) / heap.get(i).open * 100;
+    for (int i = 0; i < bydate.size(); i++) {
+        intraday_return[i] = (bydate[i].close - bydate[i].open) / bydate[i].open * 100;
         if (intraday_return[i] > max_return) {
             max_return = intraday_return[i];
-            max_date = heap.get(i).date;
+            max_date = bydate[i].date;
         }
         if (intraday_return[i] < min_return) {
             min_return = intraday_return[i];
-            min_date = heap.get(i).date;
+            min_date = bydate[i].date;
         }
     }
     out << "(6) The maximum return is " << max_return << "%" << " and it occurs on " << max_date << endl;
@@ -140,93 +144,100 @@ int main() {
         exit(1);
     }
 
-    START = clock();
+    double START2, END2;
+    START2 = clock();
 
+    Vector<stock> bydate2;
     MaxHeap heap2;
+    
+    stock temp2;
+    int cut2;
     while (getline(in, line)) {
-        cut = line.find(",");
-        temp.date = line.substr(0, cut);
-        bool is_unique = true;
+        cut2 = line.find(",");
+        temp2.date = line.substr(0, cut2);
+        bool is_unique2 = true;
         for (int j = 0; j < heap2.size(); j++) {
-            if (heap2.get(j).date == temp.date) {
-                is_unique = false;
+            if (heap2.get(j).date == temp2.date) {
+                is_unique2 = false;
                 break;
             }
         }
-        if (!is_unique) continue;
-        line = line.substr(cut + 1);
+        if (!is_unique2) continue;
+        line = line.substr(cut2 + 1);
 
-        cut = line.find(",");
-        temp.open = stod(line.substr(0, cut));
-        line = line.substr(cut + 1);
+        cut2 = line.find(",");
+        temp2.open = stod(line.substr(0, cut2));
+        line = line.substr(cut2 + 1);
 
-        cut = line.find(",");
-        temp.high = stod(line.substr(0, cut));
-        line = line.substr(cut + 1);
+        cut2 = line.find(",");
+        temp2.high = stod(line.substr(0, cut2));
+        line = line.substr(cut2 + 1);
 
-        cut = line.find(",");
-        temp.low = stod(line.substr(0, cut));
-        line = line.substr(cut + 1);
+        cut2 = line.find(",");
+        temp2.low = stod(line.substr(0, cut2));
+        line = line.substr(cut2 + 1);
 
-        temp.close = stod(line);
+        temp2.close = stod(line);
 
-        heap2.insert(temp);
+        bydate2.push_back(temp2);
+        heap2.insert(temp2);
     }
-    END = clock();
-    out << "插入資料，建樹時間: " << (END - START) / CLOCKS_PER_SEC << endl;
 
-    MaxHeap heapcopy2 = heap2;
-    out << "Task(B):" << endl;
-    out << "(1) There are " << heapcopy2.size() << " unique dates in the dataset." << endl;
+    END2 = clock();
+    out << "插入資料，建樹時間: " << (END2 - START2) / CLOCKS_PER_SEC << "秒" << endl;
 
-    heapcopy2.heapSort();
+    out << "(1) There are " << heap2.size() << " unique dates in the dataset." << endl;
+
+    heap2.heapSort();
     out << "(2) The 10 smallest prices are:" << endl;
     for (int i = 0; i < 10; i++) {
-        out << heapcopy2.get(i).close << " on date " << heapcopy2.get(i).date << endl;
+        out << heap2.get(i).close << " on date " << heap2.get(i).date << endl;
     }
 
     out << "(3) The 10 largest prices are:" << endl;
-    for (int i = heapcopy2.size() - 10; i < heapcopy2.size(); i++) {
-        out << heapcopy2.get(i).close << " on date " << heapcopy2.get(i).date << endl;
+    for (int i = heap2.size() - 10; i < heap2.size(); i++) {
+        out << heap2.get(i).close << " on date " << heap2.get(i).date << endl;
     }
 
-    out << "(4) The first median price is " << heapcopy2.get(heap2.size() / 2 - 1).close << " and its occurring date is " << heapcopy2.get(heap2.size() / 2 - 1).date << endl;
-    out << "    The second median price is " << heapcopy2.get(heap2.size() / 2).close << " and its occurring date is " << heapcopy2.get(heap2.size() / 2).date << endl;
+    out << "(4) The first median price is " << heap2.get(heap2.size() / 2 - 1).close << " and its occurring date is " << heap2.get(heap2.size() / 2 - 1).date << endl;
+    out << "    The second median price is " << heap2.get(heap2.size() / 2).close << " and its occurring date is " << heap2.get(heap2.size() / 2).date << endl;
     
-    double daily_returns2[heap2.size()];
-    max_return = 0, min_return = INT_MAX;
-    max_date="", min_date="";
-    for (int i = 0; i < heap2.size() - 1; i++) {
-        daily_returns2[i] = (heap2.get(i + 1).close - heap2.get(i).close) / heap2.get(i).close * 100;
-        if (daily_returns2[i] > max_return) {
-            max_return = daily_returns2[i];
-            max_date = heap2.get(i + 1).date;
+    double daily_returns2[bydate2.size()];
+    double max_return2 = 0, min_return2 = INT_MAX;
+    string max_date2, min_date2;
+    for (int i = 0; i < bydate2.size() - 1; i++) {
+        daily_returns2[i] = (bydate2[i + 1].close - bydate2[i].close) / bydate2[i].close * 100;
+        
+        if (daily_returns2[i] > max_return2) {
+            max_return2 = daily_returns2[i];
+            max_date2 = bydate2[i + 1].date;
         }
-        if (daily_returns2[i] < min_return) {
-            min_return = daily_returns2[i];
-            min_date = heap2.get(i + 1).date;
-        }
-    }
-    out << "(5) The maximum return is " << max_return << "%" << " and it occurs on " << max_date << endl;
-    out << "    The minimum return is " << min_return << "%" << " and it occurs on " << min_date << endl;
-
-    double intraday_return2[heap2.size()];
-    max_return = 0, min_return = INT_MAX;
-    for (int i = 0; i < heap2.size(); i++) {
-        intraday_return2[i] = (heap2.get(i).close - heap2.get(i).open) / heap2.get(i).open * 100;
-        if (intraday_return2[i] > max_return) {
-            max_return = intraday_return2[i];
-            max_date = heap2.get(i).date;
-        }
-        if (intraday_return2[i] < min_return) {
-            min_return = intraday_return2[i];
-            min_date = heap2.get(i).date;
+        if (daily_returns2[i] < min_return2) {
+            min_return2 = daily_returns2[i];
+            min_date2 = bydate2[i + 1].date;
         }
     }
-    out << "(6) The maximum return is " << max_return << "%" << " and it occurs on " << max_date << endl;
-    out << "    The minimum return is " << min_return << "%" << " and it occurs on " << min_date << endl;
 
-    n = heap2.size() * 4;
+    out << "(5) The maximum daily return is " << max_return2 << "%" << " and it occurs on " << max_date2 << endl;
+    out << "    The minimum daily return is " << min_return2 << "%" << " and it occurs on " << min_date2 << endl;
+
+    double intraday_return2[bydate2.size()];
+    max_return2 = 0, min_return2 = INT_MAX;
+    for (int i = 0; i < bydate2.size(); i++) {
+        intraday_return2[i] = (bydate2[i].close - bydate2[i].open) / bydate2[i].open * 100;
+        if (intraday_return2[i] > max_return2) {
+            max_return2 = intraday_return2[i];
+            max_date2 = bydate2[i].date;
+        }
+        if (intraday_return2[i] < min_return2) {
+            min_return2 = intraday_return2[i];
+            min_date2 = bydate2[i].date;
+        }
+    }
+    out << "(6) The maximum intraday return is " << max_return2 << "%" << " and it occurs on " << max_date2 << endl;
+    out << "    The minimum intraday return is " << min_return2 << "%" << " and it occurs on " << min_date2 << endl;
+
+    int n2 = heap2.size() * 4;
     MaxHeap all_price2;
     stock price2;
     for (int i = 0; i < heap2.size(); i++) {
@@ -241,14 +252,13 @@ int main() {
         all_price2.insert(price2);
     }
     all_price2.heapSort();
-    out << "(10) The maximum prices are: " << all_price2.get(n - 1).close << " on date " << all_price2.get(n - 1).date << endl;
+    out << "(10) The maximum prices are: " << all_price2.get(n2 - 1).close << " on date " << all_price2.get(n2 - 1).date << endl;
     out << "     The minimum prices are: " << all_price2.get(0).close << " on date " << all_price2.get(0).date << endl;
-    out << "     The first median prices are: " << all_price2.get(n / 2 - 1).close << " on date " << all_price2.get(n / 2 - 1).date << endl;
-    out << "     The second median prices are: " << all_price2.get(n / 2).close << " on date " << all_price2.get(n / 2).date << endl;
+    out << "     The first median prices are: " << all_price2.get(n2 / 2 - 1).close << " on date " << all_price2.get(n2 / 2 - 1).date << endl;
+    out << "     The second median prices are: " << all_price2.get(n2 / 2).close << " on date " << all_price2.get(n2 / 2).date << endl;
 
-    END = clock();
-    out << "建樹、排序與搜尋整體時間: " << (END - START) / CLOCKS_PER_SEC << endl;
-
+    END2 = clock();
+    out << "建樹、排序與搜尋整體時間: " << (END2 - START2) / CLOCKS_PER_SEC << "秒" << endl;
     in.close();
     return 0;
 }

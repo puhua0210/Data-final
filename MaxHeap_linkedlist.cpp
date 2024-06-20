@@ -56,10 +56,7 @@ public:
 
     void show() {
         for (int i = 0; i < 10; i++) {
-            for (int j = 0; j < 5; j++) {
-                if (j == 0) cout << int(arr.get(i).close) << " ";
-                else cout << arr.get(i).close << " ";
-            }
+            cout << arr.get(i).close;
             cout << endl;
         }
     }
