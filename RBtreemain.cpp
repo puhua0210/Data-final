@@ -16,10 +16,13 @@ int main(){
     ifstream in;
     in.close();
     in.open("C:/VScode C++ project/data structure/final_project/data1.csv");
+    ofstream out("C:/VScode C++ project/data structure/final_project/RBtree.txt");
     if (!in){
-        cout << "開啟檔案失敗！" << endl;
+        out << "開啟檔案失敗！" << endl;
         exit(1);
     } 
+    out<<"----------------------------------------Task(A)----------------------------------------------"<<endl;
+
     double START, END; 
     START = clock();
 
@@ -58,30 +61,29 @@ int main(){
         vec.push_back(temp);
     }
     END = clock();
-    cout << "插入資料，建樹時間: " << (END - START) / CLOCKS_PER_SEC << endl;
+    out << "插入資料，建樹時間: " << (END - START) / CLOCKS_PER_SEC << endl;
     
     Vector<stock> veccopy; //原本的vec是照日期排序的 不要動到 
     //2~4題使用heapcopy
-    cout << "Task(A):" << endl;
     //(1) Determine how many unique dates are in the dataset.
-    cout << "(1) There are "  << vec.size() << " unique dates in the dataset." << endl;
+    out << "(1) There are "  << vec.size() << " unique dates in the dataset." << endl;
 
     //(2) Find the 10 smallest prices and which dates contain these smallest prices.
     rbtree.inOrder(rbtree.getroot(), veccopy);//排序rbtree close price放到veccopy
-    cout << "(2) The 10 smallest prices are:" << endl;
+    out << "(2) The 10 smallest prices are:" << endl;
     for(int i=0;i<10;i++){
-        cout << veccopy[i].close << " on date " << veccopy[i].date << endl;
+        out << veccopy[i].close << " on date " << veccopy[i].date << endl;
     }
     
     //(3) Find the 10 largest prices and which dates contain these largest prices.
-    cout << "(3) The 10 largest prices are:" << endl;
+    out << "(3) The 10 largest prices are:" << endl;
     for(int i=veccopy.size()-10;i<veccopy.size();i++){
-        cout << veccopy[i].close << " on date " << veccopy[i].close << endl;
+        out << veccopy[i].close << " on date " << veccopy[i].close << endl;
     }
 
     //(4) Find the median price and its occurring date
-    cout << "(4) The first median price is " << veccopy[veccopy.size()/2-1].close << " and its occurring date is " << veccopy[veccopy.size()/2-1].date << endl;
-    cout << "    The second median price is " << veccopy[veccopy.size()/2].close << " and its occurring date is " << veccopy[veccopy.size()/2].date << endl;
+    out << "(4) The first median price is " << veccopy[veccopy.size()/2-1].close << " and its occurring date is " << veccopy[veccopy.size()/2-1].date << endl;
+    out << "    The second median price is " << veccopy[veccopy.size()/2].close << " and its occurring date is " << veccopy[veccopy.size()/2].date << endl;
 
     //(5) Compute the daily return for every day (except the first day). Then determine what the 
     // maximum and minimum returns (return could be a negative value) are and on which day(s) they occur.
@@ -100,8 +102,8 @@ int main(){
             min_date = vec[i+1].date;
         }
     }
-    cout << "(5) The maximum return is " << max_return << "%" << " and it occurs on " << max_date << endl;
-    cout << "    The minimum return is " << min_return << "%" << " and it occurs on " << min_date << endl;
+    out << "(5) The maximum return is " << max_return << "%" << " and it occurs on " << max_date << endl;
+    out << "    The minimum return is " << min_return << "%" << " and it occurs on " << min_date << endl;
     
     //(6) Compute the intraday return for every day. Then determine what the maximum and
     // minimum returns (return could be a negative value) are and on which day(s) they occur.
@@ -118,8 +120,8 @@ int main(){
             min_date = vec[i].date;
         }
     }
-    cout << "(6) The maximum return is " << max_return << "%" << " and it occurs on " << max_date << endl;
-    cout << "    The minimum return is " << min_return << "%" << " and it occurs on " << min_date << endl;
+    out << "(6) The maximum return is " << max_return << "%" << " and it occurs on " << max_date << endl;
+    out << "    The minimum return is " << min_return << "%" << " and it occurs on " << min_date << endl;
 
     //(10) Find the maximum, minimum and median prices using all the 4 columns of prices 
     // (i.e., Open_price, High_price, Low_price and Close_price) and determine on which date they occur.
@@ -141,16 +143,14 @@ int main(){
     Vector<stock> vec2;//存放all_price的資料
     all_price.inOrder(all_price.getroot(), vec2);//排序all_price rbtree放到vec2
 
-    cout << "(10) The maximum prices are: " << vec2[n-1].close << " on date " << vec2[n-1].date << endl;
-    cout << "     The minimum prices are: " << vec2[0].close << " on date " << vec2[0].date << endl;
-    cout << "     The first median prices are: " << vec2[n/2-1].close << " on date " << vec2[n/2-1].date << endl;
-    cout << "     The second median prices are: " << vec2[n/2].close << " on date " << vec2[n/2].date << endl;
+    out << "(10) The maximum prices are: " << vec2[n-1].close << " on date " << vec2[n-1].date << endl;
+    out << "     The minimum prices are: " << vec2[0].close << " on date " << vec2[0].date << endl;
+    out << "     The first median prices are: " << vec2[n/2-1].close << " on date " << vec2[n/2-1].date << endl;
+    out << "     The second median prices are: " << vec2[n/2].close << " on date " << vec2[n/2].date << endl;
     
     END = clock();
-    cout << "建樹、排序與搜尋整體時間: " << (END - START) / CLOCKS_PER_SEC << endl;
+    out << "建樹、排序與搜尋整體時間: " << (END - START) / CLOCKS_PER_SEC << endl;
 
-    cout << "Task(B):" << endl;
-    
     in.close();
     return 0;
 }

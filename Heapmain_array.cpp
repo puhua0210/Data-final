@@ -11,12 +11,13 @@ using namespace std;
 //    date open high low close daily_return intraday_return
 
 int main() {
-    cout<<"----------------------------------------Task(A)----------------------------------------------"<<endl;
     string line;
     ifstream in;
     in.open("C:/VScode C++ project/data structure/final_project/data1.csv");
+    ofstream out("C:/VScode C++ project/data structure/final_project/heap_array.txt");
+    out<<"----------------------------------------Task(A)----------------------------------------------"<<endl;
     if (!in) {
-        cout << "開啟檔案失敗！" << endl;
+        out << "開啟檔案失敗！" << endl;
         exit(1);
     }
 
@@ -56,24 +57,24 @@ int main() {
         heap.insert(temp);
     }
     END = clock();
-    cout << "插入資料，建樹時間: " << (END - START) / CLOCKS_PER_SEC << endl;
+    out << "插入資料，建樹時間: " << (END - START) / CLOCKS_PER_SEC << endl;
 
     MaxHeap heapcopy = heap;
-    cout << "(1) There are " << heapcopy.size() << " unique dates in the dataset." << endl;
+    out << "(1) There are " << heapcopy.size() << " unique dates in the dataset." << endl;
 
     heapcopy.heapSort();
-    cout << "(2) The 10 smallest prices are:" << endl;
+    out << "(2) The 10 smallest prices are:" << endl;
     for (int i = 0; i < 10; i++) {
-        cout << heapcopy.get(i).close << " on date " << heapcopy.get(i).date << endl;
+        out << heapcopy.get(i).close << " on date " << heapcopy.get(i).date << endl;
     }
 
-    cout << "(3) The 10 largest prices are:" << endl;
+    out << "(3) The 10 largest prices are:" << endl;
     for (int i = heapcopy.size() - 10; i < heapcopy.size(); i++) {
-        cout << heapcopy.get(i).close << " on date " << heapcopy.get(i).date << endl;
+        out << heapcopy.get(i).close << " on date " << heapcopy.get(i).date << endl;
     }
 
-    cout << "(4) The first median price is " << heapcopy.get(heap.size() / 2 - 1).close << " and its occurring date is " << heapcopy.get(heap.size() / 2 - 1).date << endl;
-    cout << "    The second median price is " << heapcopy.get(heap.size() / 2).close << " and its occurring date is " << heapcopy.get(heap.size() / 2).date << endl;
+    out << "(4) The first median price is " << heapcopy.get(heap.size() / 2 - 1).close << " and its occurring date is " << heapcopy.get(heap.size() / 2 - 1).date << endl;
+    out << "    The second median price is " << heapcopy.get(heap.size() / 2).close << " and its occurring date is " << heapcopy.get(heap.size() / 2).date << endl;
     
     double daily_returns[heap.size()];
     double max_return = 0, min_return = INT_MAX;
@@ -89,8 +90,8 @@ int main() {
             min_date = heap.get(i + 1).date;
         }
     }
-    cout << "(5) The maximum return is " << max_return << "%" << " and it occurs on " << max_date << endl;
-    cout << "    The minimum return is " << min_return << "%" << " and it occurs on " << min_date << endl;
+    out << "(5) The maximum return is " << max_return << "%" << " and it occurs on " << max_date << endl;
+    out << "    The minimum return is " << min_return << "%" << " and it occurs on " << min_date << endl;
 
     double intraday_return[heap.size()];
     max_return = 0, min_return = INT_MAX;
@@ -105,8 +106,8 @@ int main() {
             min_date = heap.get(i).date;
         }
     }
-    cout << "(6) The maximum return is " << max_return << "%" << " and it occurs on " << max_date << endl;
-    cout << "    The minimum return is " << min_return << "%" << " and it occurs on " << min_date << endl;
+    out << "(6) The maximum return is " << max_return << "%" << " and it occurs on " << max_date << endl;
+    out << "    The minimum return is " << min_return << "%" << " and it occurs on " << min_date << endl;
 
     int n = heap.size() * 4;
     MaxHeap all_price;
@@ -123,19 +124,19 @@ int main() {
         all_price.insert(price);
     }
     all_price.heapSort();
-    cout << "(10) The maximum prices are: " << all_price.get(n - 1).close << " on date " << all_price.get(n - 1).date << endl;
-    cout << "     The minimum prices are: " << all_price.get(0).close << " on date " << all_price.get(0).date << endl;
-    cout << "     The first median prices are: " << all_price.get(n / 2 - 1).close << " on date " << all_price.get(n / 2 - 1).date << endl;
-    cout << "     The second median prices are: " << all_price.get(n / 2).close << " on date " << all_price.get(n / 2).date << endl;
+    out << "(10) The maximum prices are: " << all_price.get(n - 1).close << " on date " << all_price.get(n - 1).date << endl;
+    out << "     The minimum prices are: " << all_price.get(0).close << " on date " << all_price.get(0).date << endl;
+    out << "     The first median prices are: " << all_price.get(n / 2 - 1).close << " on date " << all_price.get(n / 2 - 1).date << endl;
+    out << "     The second median prices are: " << all_price.get(n / 2).close << " on date " << all_price.get(n / 2).date << endl;
 
     END = clock();
-    cout << "建樹、排序與搜尋整體時間: " << (END - START) / CLOCKS_PER_SEC << endl;
+    out << "建樹、排序與搜尋整體時間: " << (END - START) / CLOCKS_PER_SEC << endl;
     in.close();
-    cout<<"----------------------------------------Task(B)----------------------------------------------"<<endl;
+    out<<"----------------------------------------Task(B)----------------------------------------------"<<endl;
 
     in.open("C:/VScode C++ project/data structure/final_project/data2.csv");//每5天取樣一次
     if (!in) {
-        cout << "開啟檔案失敗！" << endl;
+        out << "開啟檔案失敗！" << endl;
         exit(1);
     }
 
@@ -172,25 +173,25 @@ int main() {
         heap2.insert(temp);
     }
     END = clock();
-    cout << "插入資料，建樹時間: " << (END - START) / CLOCKS_PER_SEC << endl;
+    out << "插入資料，建樹時間: " << (END - START) / CLOCKS_PER_SEC << endl;
 
     MaxHeap heapcopy2 = heap2;
-    cout << "Task(B):" << endl;
-    cout << "(1) There are " << heapcopy2.size() << " unique dates in the dataset." << endl;
+    out << "Task(B):" << endl;
+    out << "(1) There are " << heapcopy2.size() << " unique dates in the dataset." << endl;
 
     heapcopy2.heapSort();
-    cout << "(2) The 10 smallest prices are:" << endl;
+    out << "(2) The 10 smallest prices are:" << endl;
     for (int i = 0; i < 10; i++) {
-        cout << heapcopy2.get(i).close << " on date " << heapcopy2.get(i).date << endl;
+        out << heapcopy2.get(i).close << " on date " << heapcopy2.get(i).date << endl;
     }
 
-    cout << "(3) The 10 largest prices are:" << endl;
+    out << "(3) The 10 largest prices are:" << endl;
     for (int i = heapcopy2.size() - 10; i < heapcopy2.size(); i++) {
-        cout << heapcopy2.get(i).close << " on date " << heapcopy2.get(i).date << endl;
+        out << heapcopy2.get(i).close << " on date " << heapcopy2.get(i).date << endl;
     }
 
-    cout << "(4) The first median price is " << heapcopy2.get(heap2.size() / 2 - 1).close << " and its occurring date is " << heapcopy2.get(heap2.size() / 2 - 1).date << endl;
-    cout << "    The second median price is " << heapcopy2.get(heap2.size() / 2).close << " and its occurring date is " << heapcopy2.get(heap2.size() / 2).date << endl;
+    out << "(4) The first median price is " << heapcopy2.get(heap2.size() / 2 - 1).close << " and its occurring date is " << heapcopy2.get(heap2.size() / 2 - 1).date << endl;
+    out << "    The second median price is " << heapcopy2.get(heap2.size() / 2).close << " and its occurring date is " << heapcopy2.get(heap2.size() / 2).date << endl;
     
     double daily_returns2[heap2.size()];
     max_return = 0, min_return = INT_MAX;
@@ -206,8 +207,8 @@ int main() {
             min_date = heap2.get(i + 1).date;
         }
     }
-    cout << "(5) The maximum return is " << max_return << "%" << " and it occurs on " << max_date << endl;
-    cout << "    The minimum return is " << min_return << "%" << " and it occurs on " << min_date << endl;
+    out << "(5) The maximum return is " << max_return << "%" << " and it occurs on " << max_date << endl;
+    out << "    The minimum return is " << min_return << "%" << " and it occurs on " << min_date << endl;
 
     double intraday_return2[heap2.size()];
     max_return = 0, min_return = INT_MAX;
@@ -222,8 +223,8 @@ int main() {
             min_date = heap2.get(i).date;
         }
     }
-    cout << "(6) The maximum return is " << max_return << "%" << " and it occurs on " << max_date << endl;
-    cout << "    The minimum return is " << min_return << "%" << " and it occurs on " << min_date << endl;
+    out << "(6) The maximum return is " << max_return << "%" << " and it occurs on " << max_date << endl;
+    out << "    The minimum return is " << min_return << "%" << " and it occurs on " << min_date << endl;
 
     n = heap2.size() * 4;
     MaxHeap all_price2;
@@ -240,13 +241,13 @@ int main() {
         all_price2.insert(price2);
     }
     all_price2.heapSort();
-    cout << "(10) The maximum prices are: " << all_price2.get(n - 1).close << " on date " << all_price2.get(n - 1).date << endl;
-    cout << "     The minimum prices are: " << all_price2.get(0).close << " on date " << all_price2.get(0).date << endl;
-    cout << "     The first median prices are: " << all_price2.get(n / 2 - 1).close << " on date " << all_price2.get(n / 2 - 1).date << endl;
-    cout << "     The second median prices are: " << all_price2.get(n / 2).close << " on date " << all_price2.get(n / 2).date << endl;
+    out << "(10) The maximum prices are: " << all_price2.get(n - 1).close << " on date " << all_price2.get(n - 1).date << endl;
+    out << "     The minimum prices are: " << all_price2.get(0).close << " on date " << all_price2.get(0).date << endl;
+    out << "     The first median prices are: " << all_price2.get(n / 2 - 1).close << " on date " << all_price2.get(n / 2 - 1).date << endl;
+    out << "     The second median prices are: " << all_price2.get(n / 2).close << " on date " << all_price2.get(n / 2).date << endl;
 
     END = clock();
-    cout << "建樹、排序與搜尋整體時間: " << (END - START) / CLOCKS_PER_SEC << endl;
+    out << "建樹、排序與搜尋整體時間: " << (END - START) / CLOCKS_PER_SEC << endl;
 
     in.close();
     return 0;
