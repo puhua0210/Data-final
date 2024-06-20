@@ -1,125 +1,66 @@
-#ifndef MAXHEAP_H
-#define MAXHEAP_H
-
 #include <iostream>
-#include "Node.h"
+#include <string>
+#include "stock.h"
+#include "linkedlist.h"
+using namespace std;
 
 class MaxHeap {
 private:
-    Node* head;
-    int size;
+    LinkedList<stock> arr;
 
 public:
-    MaxHeap() {
-        head = nullptr;
-        size = 0;
+    MaxHeap() {}
+
+    int size() {
+        return arr.size();
     }
 
-    void insert(double* a_row) {
-        Node* newNode = new Node(a_row);
-        newNode->next = head;
-        head = newNode;
-        size++;
-    }
-
-    double get(int index, int col) {
-        Node* temp = head;
-        for (int i = 0; i < index && temp != nullptr; i++) {
-            temp = temp->next;
-        }
-        if (temp == nullptr) {
-            std::cerr << "Index out of bounds!" << std::endl;
-            return -1;
-        }
-        return temp->data[col];
-    }
-
-    Node* getNode(int index) {
-        Node* temp = head;
-        for (int i = 0; i < index && temp != nullptr; i++) {
-            temp = temp->next;
-        }
-        return temp;
-    }
-
-    void swap(Node* a, Node* b) {
-        double temp[7];
-        for (int i = 0; i < 7; i++) {
-            temp[i] = a->data[i];
-            a->data[i] = b->data[i];
-            b->data[i] = temp[i];
+    void insert(stock s) {
+        arr.push_back(s);
+        int i = arr.size() - 1;
+        int parent = (i - 1) / 2;
+        while (i > 0 && arr.get(parent).close < arr.get(i).close) {
+            swap(arr.get(i), arr.get(parent));
+            i = parent;
+            parent = (i - 1) / 2;
         }
     }
 
-    void MAX_HEAPIFY(int col, int n, int i) {
+    stock get(int i) {
+        return arr.get(i);
+    }
+
+    void MAX_HEAPIFY(int n, int i) {
         int largest = i;
         int left = 2 * i + 1;
         int right = 2 * i + 2;
 
-        Node* largestNode = getNode(largest);
-        Node* leftNode = getNode(left);
-        Node* rightNode = getNode(right);
-
-        if (left < n && leftNode->data[col] > largestNode->data[col]) {
+        if (left < n && arr.get(left).close > arr.get(largest).close)
             largest = left;
-        }
 
-        if (right < n && rightNode->data[col] > getNode(largest)->data[col]) {
+        if (right < n && arr.get(right).close > arr.get(largest).close)
             largest = right;
-        }
 
         if (largest != i) {
-            swap(getNode(i), getNode(largest));
-            MAX_HEAPIFY(col, n, largest);
+            swap(arr.get(i), arr.get(largest));
+            MAX_HEAPIFY(n, largest);
         }
     }
 
-    void heapSort(int col) {
-        for (int i = size / 2 - 1; i >= 0; i--) {
-            MAX_HEAPIFY(col, size, i);
-        }
-
-        for (int i = size - 1; i >= 0; i--) {
-            swap(getNode(0), getNode(i));
-            MAX_HEAPIFY(col, i, 0);
-        }
-    }
-
-    void daily_returns() {
-        Node* prev = head;
-        Node* curr = head->next;
-        while (curr != nullptr) {
-            curr->data[5] = (curr->data[4] - prev->data[4]) / prev->data[4];
-            prev = curr;
-            curr = curr->next;
-        }
-    }
-
-    void intraday_return() {
-        Node* curr = head;
-        while (curr != nullptr) {
-            curr->data[6] = (curr->data[4] - curr->data[1]) / curr->data[1];
-            curr = curr->next;
+    void heapSort() {
+        for (int i = arr.size() - 1; i >= 0; i--) {
+            swap(arr.get(0), arr.get(i));
+            MAX_HEAPIFY(i, 0);
         }
     }
 
     void show() {
-        Node* temp = head;
-        int count = 0;
-        while (temp != nullptr && count < 10) {
+        for (int i = 0; i < 10; i++) {
             for (int j = 0; j < 5; j++) {
-                if (j == 0) std::cout << int(temp->data[j]) << " ";
-                else std::cout << temp->data[j] << " ";
+                if (j == 0) cout << int(arr.get(i).close) << " ";
+                else cout << arr.get(i).close << " ";
             }
-            std::cout << std::endl;
-            temp = temp->next;
-            count++;
+            cout << endl;
         }
     }
-
-    int getSize() {
-        return size;
-    }
 };
-
-#endif
