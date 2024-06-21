@@ -59,12 +59,9 @@ public:
         }
     }
 
-    void show(){ //測試用
-        for(int i=0;i<10;i++){
-            for(int j=0;j<5;j++){
-                if(j==0) cout << int(arr[i].close) << " ";
-                else cout << arr[i].close << " ";
-            }
+    void show() {
+        for (int i = 0; i < 10; i++) {
+            cout << arr[i].close;
             cout << endl;
         }
     }

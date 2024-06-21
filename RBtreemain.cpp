@@ -78,7 +78,7 @@ int main(){
     //(3) Find the 10 largest prices and which dates contain these largest prices.
     out << "(3) The 10 largest prices are:" << endl;
     for(int i=veccopy.size()-10;i<veccopy.size();i++){
-        out << veccopy[i].close << " on date " << veccopy[i].close << endl;
+        out << veccopy[i].close << " on date " << veccopy[i].date << endl;
     }
 
     //(4) Find the median price and its occurring date
